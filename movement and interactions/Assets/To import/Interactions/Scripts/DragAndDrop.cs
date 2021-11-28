@@ -8,45 +8,40 @@ namespace InteractionHandler
 {
     public class DragAndDrop : MonoBehaviour, IDragHandler,IBeginDragHandler,IEndDragHandler
     {
-        public bool changed = false;
-        private Vector2 startingposition;
+        public bool changed = false; // bool do sprawdzania czy obiekt dosta³ now¹ pozycjê
+        private Vector2 startingposition; // pozycja statrowa 
 
-        private CanvasGroup canvasGroup;
-        private RectTransform rectTransform;
-        private Canvas canvas;
+        private CanvasGroup canvasGroup; // u¿ywany do zmiany przezroczystoœci podnoszonego obiektu i by nie blokowa³ promieni 
+        private RectTransform rectTransform; // aktualna pozycja obiektu
+        private Canvas canvas; // canvas na którym jest umieszczony obiekt
 
 
-        public void OnBeginDrag(PointerEventData eventData)
+        public void OnBeginDrag(PointerEventData eventData) // podczas gdy zlapiemy obiekt
         {
-            startingposition = rectTransform.anchoredPosition;
-            canvasGroup.alpha = .6f;
-            canvasGroup.blocksRaycasts = false;
-            changed = false;
+            startingposition = rectTransform.anchoredPosition;// ustawiamy pozycje startow¹
+            canvasGroup.alpha = .6f; // zwiêkszamy przezroczystoœæ obiektu 
+            canvasGroup.blocksRaycasts = false; // ustawienie by ray z myszki przechodzi³ przez obiekt
+            changed = false; // ustawiamy ¿e aktualnie obiekt nie ma ¿adnego nowego slotu
         }
 
-        public void OnDrag(PointerEventData eventData)
+        public void OnDrag(PointerEventData eventData) // podczas przeci¹gania
         {
-            rectTransform.anchoredPosition += eventData.delta/canvas.scaleFactor;
+            rectTransform.anchoredPosition += eventData.delta/canvas.scaleFactor; // zmieniamy pozycjê naszego obiektu relatywnie do rozmiaru canvasu
         }
 
-        public void OnEndDrag(PointerEventData eventData)
+        public void OnEndDrag(PointerEventData eventData) // na koniec przeci¹gania gdy puszamy klawisz myszy
         {
-            canvasGroup.alpha = 1f;
-            canvasGroup.blocksRaycasts = true;
-            if (!changed)
-                rectTransform.anchoredPosition = startingposition;
-        }
-
-        public void Exchange(Vector2 changedPosition)
-        {
-            rectTransform.anchoredPosition = changedPosition;
+            canvasGroup.alpha = 1f; // przezroczystoœæ wraca do podstawowej pozycji
+            canvasGroup.blocksRaycasts = true; // obiekt teraz blokuje raye z myszy
+            if (!changed) // je¿eli obiekt nie dosta³ nowego slotu
+                rectTransform.anchoredPosition = startingposition; // to pozycja obiektu wraca do startowej
         }
 
         void Start()
         {
-            canvasGroup = GetComponent<CanvasGroup>();
-            rectTransform = GetComponent<RectTransform>();
-            canvas = GetComponentInParent<Canvas>();
+            canvasGroup = GetComponent<CanvasGroup>(); // ustalamy canvasGroup
+            rectTransform = GetComponent<RectTransform>(); // ustalamy RectTransform
+            canvas = GetComponentInParent<Canvas>(); // ustalamy Canvas
         }
 
 
