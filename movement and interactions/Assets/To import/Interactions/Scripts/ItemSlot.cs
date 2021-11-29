@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace InteractionHandler.Frame
+namespace Delore.UI
 {
     public class ItemSlot : MonoBehaviour, IDropHandler
     {

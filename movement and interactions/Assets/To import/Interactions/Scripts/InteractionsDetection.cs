@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace InteractionHandler
+namespace Delore.UI
 {
     public class InteractionsDetection : MonoBehaviour
     {
