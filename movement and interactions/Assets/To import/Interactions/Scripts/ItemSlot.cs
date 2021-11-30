@@ -7,6 +7,7 @@ namespace Delore.UI
 {
     public class ItemSlot : MonoBehaviour, IDropHandler
     {
+        [SerializeField] public int TrendTime { get; private set; } = 3;
         private RectTransform objectRectTransform;//pozycja twojego obiektu
         [SerializeField] Types type; // typ przygotowany na przysz³oœæ 
         public void OnDrop(PointerEventData eventData) // metoda u¿ywana przy puszaniu myszy

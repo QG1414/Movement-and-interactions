@@ -28,6 +28,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		Vector3 m_CapsuleCenter;
 		CapsuleCollider m_Capsule;
 		bool m_Crouching;
+		float lastLevelOfSound = 0;
+		internal float SoundLevel = 0;
 
 
 		void Start()
@@ -41,6 +43,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
 			m_OrigGroundCheckDistance = m_GroundCheckDistance;
 		}
+		
 
 
 		public void Move(Vector3 move, bool crouch, bool jump)
@@ -49,7 +52,10 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			// convert the world relative moveInput vector into a local-relative
 			// turn amount and forward amount required to head in the desired
 			// direction.
-			if (move.magnitude > 1f) move.Normalize();
+			if (move.magnitude > 1f)
+			{
+				move.Normalize();
+			}
 			move = transform.InverseTransformDirection(move);
 			CheckGroundStatus();
 			move = Vector3.ProjectOnPlane(move, m_GroundNormal);
@@ -84,7 +90,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				m_Capsule.height = m_Capsule.height / 2f;
 				m_Capsule.center = m_Capsule.center / 2f;
 				m_Crouching = true;
-			}
+	}
 			else
 			{
 				Ray crouchRay = new Ray(m_Rigidbody.position + Vector3.up * m_Capsule.radius * k_Half, Vector3.up);
@@ -114,9 +120,23 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			}
 		}
 
-
+		void GetMovementSound()
+        {
+			if (lastLevelOfSound != Mathf.Round(m_ForwardAmount*10))
+			{
+				lastLevelOfSound = Mathf.Round(m_ForwardAmount * 10);
+				SoundLevel = lastLevelOfSound;
+			}
+			if (m_Crouching && (SoundLevel == 5 || SoundLevel == 10))
+			{ 
+				SoundLevel -= 3;
+				lastLevelOfSound = SoundLevel;
+			}
+        }
 		void UpdateAnimator(Vector3 move)
 		{
+
+			GetMovementSound();
 			// update the animator parameters
 			m_Animator.SetFloat("Forward", m_ForwardAmount, 0.1f, Time.deltaTime);
 			m_Animator.SetFloat("Turn", m_TurnAmount, 0.1f, Time.deltaTime);

@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using Delore.UI;
+
 
 namespace Delore.UI
 {
     public class DragAndDrop : MonoBehaviour, IDragHandler,IBeginDragHandler,IEndDragHandler
     {
+        
         public bool changed = false; // bool do sprawdzania czy obiekt dosta³ now¹ pozycjê
         private Vector2 startingposition; // pozycja statrowa 
 
@@ -42,6 +43,8 @@ namespace Delore.UI
             canvasGroup = GetComponent<CanvasGroup>(); // ustalamy canvasGroup
             rectTransform = GetComponent<RectTransform>(); // ustalamy RectTransform
             canvas = GetComponentInParent<Canvas>(); // ustalamy Canvas
+
+
         }
 
 

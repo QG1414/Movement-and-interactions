@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEngine;
-using Delore.AI; 
+using Delore.AI;
+
 
 [CustomEditor(typeof(AIMovment))]
 public class FieldOfViewEditor : Editor
@@ -10,8 +11,10 @@ public class FieldOfViewEditor : Editor
     {
         AIMovment ai = (AIMovment)target;
 
-        Handles.color = Color.yellow;
+        Handles.color = Color.green;
         Handles.DrawWireArc(ai.transform.position, Vector3.up, Vector3.forward, 360, ai.radius);
+
+
 
         Vector3 viewAngle01 = DirectionFromAngle(ai.transform.eulerAngles.y, -ai.angle / 2);
         Vector3 viewAngle02 = DirectionFromAngle(ai.transform.eulerAngles.y, ai.angle / 2);
@@ -27,4 +30,5 @@ public class FieldOfViewEditor : Editor
         angleInDegrees += eulerY;
         return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad),0,Mathf.Cos(angleInDegrees*Mathf.Deg2Rad));
     }
+   
 }

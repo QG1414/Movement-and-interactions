@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityStandardAssets.Characters.ThirdPerson;
 
 namespace Delore.AI
 {
@@ -9,6 +10,7 @@ namespace Delore.AI
     {
         private NavMeshAgent agent;
         private GameObject player;
+        private ThirdPersonCharacter character;
 
         private float timer;
         private bool canSeePlayer = false;
@@ -19,6 +21,9 @@ namespace Delore.AI
         [Range(0,360)]
         public float angle = 120;
 
+        [Range(0, 100)]
+        public float hearingDistance = 10;
+
         [SerializeField] float LengthOfChasing;
         
         
@@ -26,6 +31,7 @@ namespace Delore.AI
         {
             agent = GetComponent<NavMeshAgent>();
             player = GameObject.FindGameObjectWithTag("Player");
+            character = player.GetComponent<ThirdPersonCharacter>();
             StartCoroutine(FOVRoutine());
         }
 
@@ -37,15 +43,35 @@ namespace Delore.AI
 
         private void Mover()
         {
-            if (canSeePlayer)
+
+            if (canSeePlayer || HeardPlayer())
             {
                 timer = LengthOfChasing;
                 agent.destination = player.transform.position;
             }
             else if (timer > 0)
                 agent.destination = player.transform.position;
-
+            else
+            {
+                Patrol();
+            }
             timer -= Time.deltaTime;
+
+        }
+
+        private void Patrol()
+        {
+            return;
+        }
+        private bool HeardPlayer()
+        {
+            return Vector3.Distance(player.transform.position, transform.position) <= hearingDistance * character.SoundLevel / 10;
+        }
+
+        void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, hearingDistance);
         }
 
         private IEnumerator FOVRoutine()
