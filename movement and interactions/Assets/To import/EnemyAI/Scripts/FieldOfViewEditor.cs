@@ -3,26 +3,26 @@ using UnityEngine;
 using Delore.AI;
 
 
-[CustomEditor(typeof(AIMovment))]
+[CustomEditor(typeof(AIDetection))] // use this file when this script is used
 public class FieldOfViewEditor : Editor
 {
-    // Start is called before the first frame update
-    private void OnSceneGUI()
+
+    private void OnSceneGUI() // GUI we see in scene window
     {
-        AIMovment ai = (AIMovment)target;
+        AIDetection ai = (AIDetection)target; // We Get our script
 
-        Handles.color = Color.green;
-        Handles.DrawWireArc(ai.transform.position, Vector3.up, Vector3.forward, 360, ai.radius);
-
-
-
-        Vector3 viewAngle01 = DirectionFromAngle(ai.transform.eulerAngles.y, -ai.angle / 2);
-        Vector3 viewAngle02 = DirectionFromAngle(ai.transform.eulerAngles.y, ai.angle / 2);
+        Handles.color = Color.green; // change color of lines to green
+        Handles.DrawWireArc(ai.transform.position, Vector3.up, Vector3.forward, 360, ai.radius); // draw circle line around player with given radius
 
 
-        Handles.color = Color.red;
-        Handles.DrawLine(ai.transform.position,ai.transform.position + viewAngle01 * ai.radius);
-        Handles.DrawLine(ai.transform.position,ai.transform.position + viewAngle02 * ai.radius);
+
+        Vector3 viewAngle01 = DirectionFromAngle(ai.transform.eulerAngles.y, -ai.angle / 2); // calculate first angle
+        Vector3 viewAngle02 = DirectionFromAngle(ai.transform.eulerAngles.y, ai.angle / 2); // calculate second angle
+
+
+        Handles.color = Color.red; // chenge color of lines to red
+        Handles.DrawLine(ai.transform.position,ai.transform.position + viewAngle01 * ai.radius); // draw first line representing first angle
+        Handles.DrawLine(ai.transform.position,ai.transform.position + viewAngle02 * ai.radius); // draw second line representing second angle
         
     }
     private Vector3 DirectionFromAngle(float eulerY, float angleInDegrees)
@@ -32,3 +32,4 @@ public class FieldOfViewEditor : Editor
     }
    
 }
+

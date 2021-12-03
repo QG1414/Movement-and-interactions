@@ -122,10 +122,10 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 		void GetMovementSound()
         {
-			if (lastLevelOfSound != Mathf.Round(m_ForwardAmount*10))
+			if (lastLevelOfSound != Mathf.Round(m_ForwardAmount*10)) 
 			{
 				lastLevelOfSound = Mathf.Round(m_ForwardAmount * 10);
-				SoundLevel = lastLevelOfSound;
+				SoundLevel = lastLevelOfSound; 
 			}
 			if (m_Crouching && (SoundLevel == 5 || SoundLevel == 10))
 			{ 
