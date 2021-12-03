@@ -5,7 +5,7 @@ Simple Movement and AI for enemys
 For Player:
   1. Movment (done)
   2. Jump (done)
-  3. Loudness of movments (done)
+  3. Loudness of movements (done)
 
 For Enemy:
   1. Movment (done)
