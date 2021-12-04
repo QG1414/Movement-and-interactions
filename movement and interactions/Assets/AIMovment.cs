@@ -17,7 +17,7 @@ namespace Delore.AI
         bool isChasing = false;
         bool waiting = false;
 
-        public EnemyType enemyType;
+        public AIType aiType;
 
 
         [SerializeField]
@@ -43,35 +43,29 @@ namespace Delore.AI
 
         private void Mover()
         {
-            switch (enemyType)
+            if (detection.FieldOfView() || detection.HeardPlayer())
             {
-                case EnemyType.Human:
-                    if (detection.FieldOfView() || detection.HeardPlayer())
-                    {
-                        agent.isStopped = false;
-                        timer = timeOfChasing;
-                        agent.destination = player.transform.position;
-                        isChasing = true;
-                    }
-                    else if (timer > 0)
-                    {
-                        agent.destination = player.transform.position;
-                    }
-                    else
-                    {
-                        if (isChasing)
-                            agent.isStopped = true;
-                        isChasing = false;
-                    }
-                    timer -= Time.deltaTime;
-                    break;
-                case EnemyType.AgressiveAnimal:
-                    break;
-                case EnemyType.PassiveAnimal:
-                    break;
+                agent.isStopped = false;
+                timer = timeOfChasing;
+                agent.destination = AIType.Aggressive == aiType ? player.transform.position : RunningDirection();
+                isChasing = true;
             }
-
+            else if (timer > 0)
+            {
+                agent.destination = AIType.Aggressive == aiType ? player.transform.position : RunningDirection();
+            }
+            else
+            {
+                if (isChasing)
+                    agent.isStopped = true;
+                if (AIType.Passive == aiType)
+                    startingPos = transform.position;
+                isChasing = false;
+            }
+            timer -= Time.deltaTime;
         }
+
+
 
         private IEnumerator Patrol()
         {
@@ -85,14 +79,25 @@ namespace Delore.AI
             waiting = false;
 
         }
+
+        private Vector3 RunningDirection()
+        {
+            float pos_x = player.transform.position.x;
+            float pos_y = player.transform.position.y;
+            float pos_z = player.transform.position.z;
+            float runningDistance = Mathf.Max(detection.radius, detection.hearingDistance) * 2f;
+            if (transform.position.x > pos_x)
+                return pos_z > transform.position.z ? new Vector3(pos_x + runningDistance, pos_y, pos_z - runningDistance) : new Vector3(pos_x + runningDistance, pos_y, pos_z+ runningDistance);
+            else
+                return pos_z > transform.position.z ? new Vector3(pos_x - runningDistance, pos_y, pos_z - runningDistance) : new Vector3(pos_x - runningDistance, pos_y, pos_z + runningDistance);
+        }
  
     }
 
-    public enum EnemyType
+    public enum AIType
     {
-        Human,
-        AgressiveAnimal,
-        PassiveAnimal
+        Aggressive,
+        Passive
     }
 
 }
