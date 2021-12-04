@@ -943,7 +943,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5000001
-  m_Speed: 10
+  m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -1045,8 +1045,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddf886cd57d650b48a2e931a763f3004, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 2
-  timeOfChasing: 3
+  aiType: 1
+  timeOfChasing: 10
   patrolTime: 8
 --- !u!114 &502629627
 MonoBehaviour:
@@ -2700,15 +2700,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3170961884205579550, guid: e17c86d47646a0d4189a4117669362e5, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.2669336
+      value: 0.26693356
       objectReference: {fileID: 0}
     - target: {fileID: 3170961884205579550, guid: e17c86d47646a0d4189a4117669362e5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -3.4238033e-15
+      value: -0.000000028720944
       objectReference: {fileID: 0}
     - target: {fileID: 3170961884205579550, guid: e17c86d47646a0d4189a4117669362e5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 1.836517e-15
+      value: 0.00000000795524
       objectReference: {fileID: 0}
     - target: {fileID: 3170961885807692348, guid: e17c86d47646a0d4189a4117669362e5, type: 3}
       propertyPath: m_LocalRotation.x
