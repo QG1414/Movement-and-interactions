@@ -25,6 +25,10 @@ namespace Delore.AI {
         [Range(0, 100)]
         public float hearingDistance = 10;
 
+        [SerializeField]
+        bool tracking = false;
+
+
 
         void Start()
         {
@@ -69,8 +73,13 @@ namespace Delore.AI {
 
         private void OnTriggerEnter(Collider other)
         {
+            if (tracking && !GameObject.Find("SmellObject(Clone)"))
+            {
+                other.GetComponent<ThirdPersonCharacter>().LeftSmell();
+            }
             if (other.tag == "Player")
                 playerInRange = true;
+            
         }
 
         private void OnTriggerExit(Collider other)

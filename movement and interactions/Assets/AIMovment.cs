@@ -10,12 +10,15 @@ namespace Delore.AI
     {
         NavMeshAgent agent;
         GameObject player;
+        SmellObject smellObject;
         AIDetection detection;
         Vector3 startingPos;
+        float speed;
 
         float timer;
         bool isChasing = false;
         bool waiting = false;
+        bool smelled = false;
 
         public AIType aiType;
 
@@ -23,14 +26,16 @@ namespace Delore.AI
         [SerializeField]
         float timeOfChasing = 3f, patrolTime = 8f;
 
-        
+
+
 
         void Start()
         {
             agent = GetComponent<NavMeshAgent>();
-            player = GameObject.FindGameObjectWithTag("Player"); 
+            player = GameObject.FindGameObjectWithTag("Player");
             detection = GetComponent<AIDetection>();
             startingPos = transform.position;
+            speed = agent.speed;
         }
 
         void Update()
@@ -39,12 +44,24 @@ namespace Delore.AI
                 Mover();
             if (!isChasing && !waiting)
                 StartCoroutine(Patrol());
+            if (smelled)
+                smelled = SmellIsActive();
+
+        }
+
+        private bool SmellIsActive()
+        {
+            if(GameObject.Find("SmellObject(Clone)") != null)
+                return true;
+            return false;
         }
 
         private void Mover()
         {
-            if (detection.FieldOfView() || detection.HeardPlayer())
+            if (detection.FieldOfView() || detection.HeardPlayer() || smelled)
             {
+                if (speed != agent.speed)
+                    agent.speed += 1f;
                 agent.isStopped = false;
                 timer = timeOfChasing;
                 agent.destination = AIType.Aggressive == aiType ? player.transform.position : RunningDirection();
@@ -77,7 +94,16 @@ namespace Delore.AI
             agent.destination = new Vector3(pos_x, 0, pos_z);
             yield return new WaitForSeconds(Random.Range(patrolTime,patrolTime+3));
             waiting = false;
-
+            if (aiType == AIType.Aggressive && !isChasing)
+            {
+                GameObject smell = GameObject.Find("SmellObject(Clone)");
+                if (smell != null && SmellPlayer(smell.transform.position))
+                {
+                    smellObject = GameObject.Find("SmellObject(Clone)").GetComponent<SmellObject>();
+                    smelled = true;
+                    agent.speed -= 1f;
+                }
+             }
         }
 
         private Vector3 RunningDirection()
@@ -91,7 +117,14 @@ namespace Delore.AI
             else
                 return pos_z > transform.position.z ? new Vector3(pos_x - runningDistance, pos_y, pos_z - runningDistance) : new Vector3(pos_x - runningDistance, pos_y, pos_z + runningDistance);
         }
- 
+
+        private bool SmellPlayer(Vector3 pos)
+        {
+            if (Vector3.Distance(transform.position, pos) <= Mathf.Min(detection.radius, detection.hearingDistance) - 10f)
+                return true;
+            return false;
+        }
+
     }
 
     public enum AIType
