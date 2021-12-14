@@ -11,6 +11,5 @@ For Enemy:
   1. Movment (done)
   2. Field of view (done)
   3. Hearing player (done)
-  4. Types of enemys
-  5. Tracking smell of player
+  4. Types of enemys (done)
   6. Optimalization
